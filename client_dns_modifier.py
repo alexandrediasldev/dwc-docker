@@ -2,6 +2,27 @@ from python_hosts import Hosts, HostsEntry, is_ipv4
 from time import sleep
 import ctypes, os
 
+# Hardcoded default ip
+default_ip="10.42.69.50"
+
+def ask_yesno(question):
+    """
+    Helper to get yes / no answer from user.^M
+    """
+    yes = {'yes', 'y', ''}
+    no = {'no', 'n'}
+
+    done = False
+    print(question)
+    while not done:
+        choice = input().lower()
+        if choice in yes:
+            return True
+        elif choice in no:
+            return False
+        else:
+            print("Please respond by yes or no.")
+
 
 def is_admin():
     try:
@@ -37,7 +58,11 @@ if not is_admin():
     exit()
 
 # Get IP and check if it is a valid IPv4 address
-ip_input = input("Please enter the IP address for the fake Nintendo WFC server: ")
+if ask_yesno("Use the default IP: "+default_ip+" ? [Y/n]"):
+    ip_input = default_ip
+else:
+    ip_input = input("Please enter the IP address for the fake Nintendo WFC server: ")
+
 try:
     if not is_ipv4(ip_input):
         raise ValueError
